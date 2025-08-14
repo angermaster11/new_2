@@ -36,7 +36,9 @@ const blogs = [
 ];
 
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }));
 app.use('/home',(req,res,next)=>{
+    
     if(password == 800){
         next();
     } else {
@@ -50,6 +52,17 @@ app.get('/home/bye', (req, res) => {
 app.get('/blogs', (req, res) => {
   res.render('blogs', { title: 'Blogs', blogs });
 });
+
+app.get('/blogs/new', (req, res) => {
+  res.render('blogs/new', { title: 'Add a New Blog' });
+});
+
+app.post('/blogs', (req, res) => {
+    const {author,comment} = req.body;
+    blogs.push({ id: blogs.length + 1, author, comment });
+    // res.send("Blog added successfully");
+    res.redirect('/blogs');
+})
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
